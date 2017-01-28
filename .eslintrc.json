@@ -1,4 +1,4 @@
-module.exports = {
+{
     "env": {
         "browser": true,
         "es6": true,
@@ -16,7 +16,8 @@ module.exports = {
         "array-bracket-spacing":  [2, "never"],
         "indent": [
             "error",
-            4
+            4,
+            { "SwitchCase": 1 }
         ],
         "linebreak-style": [
             "error",
@@ -32,4 +33,4 @@ module.exports = {
         ],
         "no-console": 0
     }
-};
+}
