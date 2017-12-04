@@ -1,6 +1,6 @@
 {
   "name": "starter.nodejs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Starter kit for NodeJS",
   "scripts": {
     "analysis": "plato --dir analysis --recurse --eslint .eslintrc.json --title \"Starter server\" src/**/*.js",
