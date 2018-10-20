@@ -1,12 +1,15 @@
-// ******************** NodeJS packages ********************
+/* eslint-disable import/no-extraneous-dependencies */
+// ============================================================
+// Import packages
 const grunt = require('grunt');
 
-// ******************** Script ********************
+// ============================================================
+// Tasks
 grunt.initConfig({
     babel: {
         options: {
             sourceMaps: true,
-            presets: ['es2015', 'es2016', 'es2017']
+            presets: ['es2015', 'es2016', 'es2017'],
         },
         dist: {
             files: [{
@@ -14,45 +17,46 @@ grunt.initConfig({
                 cwd: 'src',
                 src: ['**/*.js'],
                 dest: 'build/',
-                ext: '.js'
-            }]
-        }
-    }
-    
-   , clean: {
-       build: ['build/'],
-       doc : ['doc/']
-   }
+                ext: '.js',
+            }],
+        },
+    },
 
-   , eslint: {
-       target: {
-           expand: true
-         , cwd   : 'src'
-         , src   : ['**/*.js']
-         , dest  : 'build/'
-         , ext   : '.js'}
-   }
+    clean: {
+        build: ['build/'],
+        doc: ['doc/'],
+    },
 
-   , mocha : {
-       test: {
-           src: ['src\\**\\__test__\\**\\*.js'],
-           opts : 'mocha.opts'
-       }
-   }
+    eslint: {
+        target: {
+            expand: true,
+            cwd: 'src',
+            src: ['**/*.js'],
+            dest: 'build/',
+            ext: '.js',
+        },
+    },
 
-   , watch: {
-       scripts: {
-           files: ['src/**/*.js'
-                , 'gruntfile.js'
-                , 'package.json'
-                , '.eslintrc.js']
-        , tasks: ['build']
-        , options: {
-            atBegin : true
-            , spawn   : false
-        }
-       }
-   }
+    mocha: {
+        test: {
+            src: ['src\\**\\__test__\\**\\*.js'],
+            opts: 'mocha.opts',
+        },
+    },
+
+    watch: {
+        scripts: {
+            files: ['src/**/*.js',
+                'gruntfile.js',
+                'package.json',
+                '.eslintrc.js'],
+            tasks: ['build'],
+            options: {
+                atBegin: true,
+                spawn: false,
+            },
+        },
+    },
 
 });
 

@@ -6,4 +6,4 @@ function start() {
     return 'And so the hack started !';
 }
 
-export {start};
+export { start };
