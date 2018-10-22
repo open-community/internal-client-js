@@ -3,7 +3,7 @@
  * @returns {string}
  */
 function start() {
-    return 'And so the hack started !';
+    return 'And so the project started !';
 }
 
 export { start };
