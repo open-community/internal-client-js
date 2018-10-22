@@ -9,7 +9,8 @@ const sourcemaps = require('gulp-sourcemaps');
 
 // ============================================================
 // Module's constants and variables
-const DIST_DIRECTORY = './dist';
+const DIST_FOLDER_PATH = './dist';
+const UNIT_TEST_FOLDER_PATH = './reports/tests/unit';
 
 // ============================================================
 // Simple tasks
@@ -17,7 +18,11 @@ const DIST_DIRECTORY = './dist';
 // ==============================
 // Clean
 gulp.task('clean:build', () => del([
-    DIST_DIRECTORY,
+    DIST_FOLDER_PATH,
+]));
+
+gulp.task('clean:tests:unit', () => del([
+    UNIT_TEST_FOLDER_PATH,
 ]));
 
 // ==============================

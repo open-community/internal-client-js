@@ -12,8 +12,8 @@
     "lint:javascript": "eslint .",
     "start": "node dist/index.js ",
     "start:src": "node --inspect --require @babel/register src/index.js",
-    "test": "mocha src/**//*.spec.js --opts mocha.opts",
-    "test-cov": "istanbul cover ./node_modules/mocha/bin/_mocha -- src/**/*.spec.js --opts mocha.opts -R spec",
+    "test": "gulp clean:tests:unit && mocha src/**/*.spec.js --opts mocha.opts",
+    "test-cov": "gulp clean:tests:unit && nyc npm test",
     "watcher": "grunt watch"
   },
   "repository": {
@@ -31,20 +31,20 @@
     "babel-plugin-istanbul": "^5.1.0",
     "del": "^3.0.0",
     "eslint": "^5.3.0",
-    "eslint-config-airbnb": "^17.1.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "gulp": "^4.0.0",
     "gulp-babel": "^8.0.0",
     "gulp-cli": "^2.0.1",
     "gulp-sourcemaps": "^2.6.4",
-    "istanbul": "^1.1.0-alpha.1",
     "jsdoc": "^3.4.3",
     "jsdoc-oblivion": "0.0.9",
     "minami": "^1.1.1",
     "mocha": "^5.2.0",
+    "mocha-multi-reporters": "^1.1.7",
     "mochawesome": "^3.1.1",
     "npm-run-all": "^4.1.3",
+    "nyc": "^13.1.0",
     "source-map-support": "^0.5.9"
   }
 }

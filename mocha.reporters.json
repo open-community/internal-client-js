@@ -1,0 +1,11 @@
+{
+    "reporterEnabled": "xunit, mochawesome",
+    "mochawesomeReporterOptions": {
+        "reportDir": "reports/tests/unit/results",
+        "reportFilename": "index.html",
+        "json": false
+    },
+    "xunitReporterOptions": {
+        "output": "reports/tests/unit/xunit.xml"
+    }
+}

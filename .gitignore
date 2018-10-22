@@ -1,7 +1,8 @@
 # Project folder
+/cache
 /dist
-/reports
 /node_modules
+/reports
 
 # IDE folders
 

@@ -1,8 +1,7 @@
 --require source-map-support/register
 --require @babel/register
 --recursive
---reporter mochawesome
---reporter-options reportDir=reports/tests/unit
+--reporter mocha-multi-reporters
+--reporter-options configFile=mocha.reporters.json
 --use-strict
---check-leaks
 --ui bdd
