@@ -1,9 +1,18 @@
 language: node_js
 node_js:
-  - "6"
-  - "6.1"
-  - "5.11"
-  - "0.6"
-  - "iojs"
-script:
-  - npm run builder
+  - "8"
+  - "10"
+  - "11"
+
+stages:
+    - validation
+
+jobs:
+    include:
+        - stage: validation
+          name: "Unit tests"
+          script: "npm test"
+
+        - stage: validation
+          name: "Lint"
+          script: "npm test"

@@ -2,8 +2,6 @@
 
 Simple node starter, using Babel 7, gulp 4, unit testing, eslinting, etc...
 
-[TOC]
-
 ## Usage
 
 ```
