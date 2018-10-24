@@ -3,7 +3,8 @@
     "mochawesomeReporterOptions": {
         "reportDir": "reports/tests/unit/results",
         "reportFilename": "index.html",
-        "json": false
+        "json": false,
+        "quiet": true
     },
     "xunitReporterOptions": {
         "output": "reports/tests/unit/xunit.xml"

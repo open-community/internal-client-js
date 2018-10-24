@@ -9,7 +9,9 @@
         "src/**/*.js"
     ],
     "exclude": [
-        "src/**/*.spec.js"
+        "src/**/*.spec.js",
+        "src/cli.js",
+        "src/index.js"
     ],
     "ignore-class-method": "methodToIgnore",
     "reporter": [

@@ -1,4 +1,5 @@
-import console from 'better-console';
-import { start } from './helpers';
+import { sayHello } from './helpers';
 
-console.log(start());
+// ============================================================
+// Exports
+export default sayHello;
