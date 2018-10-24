@@ -14,8 +14,9 @@
     "doc": "grunt clean:doc && jsdoc -c jsdoc.json --readme README.md",
     "lint": "run-s lint:*",
     "lint:javascript": "eslint .",
-    "start": "node dist/index.js ",
-    "start:src": "node --inspect --require @babel/register src/index.js",
+    "start": "node dist/cli.js",
+    "start:src": "node --inspect --require @babel/register src/cli.js",
+    "start:brk": "node --inspect-brk --require @babel/register src/cli.js",
     "test": "gulp clean:tests:unit && mocha src/**/*.spec.js --opts mocha.opts",
     "test-cov": "nyc npm test",
     "watcher": "grunt watch"
