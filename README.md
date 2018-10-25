@@ -45,7 +45,7 @@ This will generate two reports:
 * `./reports/tests/unit/results/index.html`: [Mochawesome](https://www.npmjs.com/package/mochawesome) report
 
 #### Coverage
-Coverage is performed by using [Istanbul](https://istanbul.js.org/).
+Coverage is performed by using [Istanbul/nyc](https://istanbul.js.org/).
 
 ```
 npm run test-cov
@@ -55,6 +55,14 @@ This command will generate:
 * Unit tests reports as describe bellow
 * `./reports/tests/unit/coverage/lcov.info' : lcov file
 * `./reports/tests/unit/coverage/lcov-report/index.html' : HTML report file
+
+### Continuous Integration
+Travis is already configured with several jobs and stages:
+
+| Stage       | Job           | Description                                                         |
+| Validation  | Unit tests    | Run unit testing                                                    |
+| Validation  | Lint          | Run code linting                                                    |
+| Publication | Documentation | (`master` branch only) Create and publish the project documentation |
 
 ## Usage
 

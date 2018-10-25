@@ -4,6 +4,12 @@ import console from 'better-console';
 
 // ============================================================
 // Functions
+/**
+ * Return hello message
+ * @param {string} [name] - Name of the person to say hello to
+ * @returns {string}
+ * @public
+ */
 function getHelloMessage(name) {
     if (name) {
         return `Hello ${name} !`;
@@ -13,7 +19,8 @@ function getHelloMessage(name) {
 }
 
 /**
- * Starting point of the application
+ * Display hello message
+ * @param {string} [name] - Name of the person to say hello to
  * @returns {string}
  */
 function sayHello(name) {

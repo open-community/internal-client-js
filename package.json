@@ -11,7 +11,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "gulp build",
-    "doc": "grunt clean:doc && jsdoc -c jsdoc.json --readme README.md",
+    "doc": "jsdoc -c jsdoc.json --readme README.md",
     "lint": "run-s lint:*",
     "lint:javascript": "eslint .",
     "start": "node dist/cli.js",

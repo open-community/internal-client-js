@@ -1,6 +1,7 @@
 # Project folder
 /cache
 /dist
+/doc
 /node_modules
 /reports
 

@@ -10,6 +10,7 @@ const sourcemaps = require('gulp-sourcemaps');
 // ============================================================
 // Module's constants and variables
 const DIST_FOLDER_PATH = './dist';
+const DOC_FOLDER_PATH = './doc';
 const UNIT_TEST_FOLDER_PATH = './reports/tests/unit';
 
 // ============================================================
@@ -19,6 +20,10 @@ const UNIT_TEST_FOLDER_PATH = './reports/tests/unit';
 // Clean
 gulp.task('clean:build', () => del([
     DIST_FOLDER_PATH,
+]));
+
+gulp.task('clean:doc', () => del([
+    DOC_FOLDER_PATH,
 ]));
 
 gulp.task('clean:tests:unit', () => del([

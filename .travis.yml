@@ -16,3 +16,9 @@ jobs:
         - stage: validation
           name: "Lint"
           script: "npm test"
+
+        - stage: publish
+          name: "documentation"
+          script: "npm run doc"
+          if branches:
+              - master
