@@ -1,24 +1,44 @@
 language: node_js
+
 node_js:
-  - "8"
   - "10"
-  - "11"
+
+cache:
+  directories:
+    - ~/.npm
+
+notifications:
+  email: false
 
 stages:
     - validation
+    - publication
+    - release
 
 jobs:
     include:
         - stage: validation
           name: "Unit tests"
           script: "npm test"
+          node_js:
+              - "6"  # Maintenance LTS
+              - "8"  # Active LTS
+              - "10" # Next LTS
+              - "11" # Latest
 
         - stage: validation
           name: "Lint"
           script: "npm test"
 
-        - stage: publish
+        - stage: publication
           name: "documentation"
           script: "npm run doc"
+          if branches:
+              - master
+
+        - stage: release
+          name: "New version"
+          script:
+              - npm run semantic-release
           if branches:
               - master
