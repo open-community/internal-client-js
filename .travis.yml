@@ -21,7 +21,6 @@ jobs:
           name: "Unit tests"
           script: "npm test"
           node_js:
-              - "6"  # Maintenance LTS
               - "8"  # Active LTS
               - "10" # Next LTS
               - "11" # Latest
