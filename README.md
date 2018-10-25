@@ -1,5 +1,7 @@
 # starter.nodejs
 
+[![Build Status](https://travis-ci.org/AbrahamTewa/starter.nodejs.svg?branch=master)](https://travis-ci.org/AbrahamTewa/starter.nodejs) [![Dependency status](https://david-dm.org/AbrahamTewa/starter.nodejs.svg)](https://david-dm.org/AbrahamTewa/starter.nodejs)
+
 Simple node starter, using Babel 7, gulp 4, unit testing, eslinting, etc...
 
 ## Usage
