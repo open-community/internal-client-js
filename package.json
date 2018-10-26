@@ -4,7 +4,9 @@
   "description": "Starter kit for NodeJS",
   "author": "Abraham TEWA",
   "license": "MIT",
-  "homepage": "https://github.com/AbrahamTewa/starter.nodejs",
+  "homepage": "https://abrahamtewa.github.io/starter.nodejs",
+  "bugs": "https://github.com/AbrahamTewa/starter.nodejs/issues",
+  "private": true,
   "bin": {
     "hello": "./dist/cli.js"
   },
