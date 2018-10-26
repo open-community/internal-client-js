@@ -12,7 +12,6 @@ notifications:
 
 stages:
     - validation
-    - publication
     - release
 
 jobs:
@@ -29,15 +28,22 @@ jobs:
           name: "Lint"
           script: "npm test"
 
-        - stage: publication
-          name: "documentation"
-          script: "npm run doc"
-          if branches:
-              - master
+        - stage: release
+          node_js: "10"
+          # Advanced: optionally overwrite your default `script` step to skip the tests
+          # script: skip
+          deploy:
+              provider: script
+              skip_cleanup: true
+              script:
+                - npm run semantic-release
 
         - stage: release
-          name: "New version"
-          script:
-              - npm run semantic-release
-          if branches:
-              - master
+          name: "Documentation"
+          deploy:
+                provider: pages
+                skip-cleanup: true
+                github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+                keep-history: true
+                on:
+                    branch: master
