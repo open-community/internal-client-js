@@ -2,6 +2,7 @@
 /cache
 /dist
 /doc
+/jsdoc
 /node_modules
 /reports
 /_book

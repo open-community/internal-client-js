@@ -11,8 +11,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "gulp build",
-    "doc": "jsdoc2md -c jsdoc.json --files src > documentation/REFERENCE.md",
-    "jsdoc": "jsdoc -c jsdoc.json --readme README.md",
+    "doc:jsdoc": "jsdoc -c jsdoc.json --readme README.md",
     "lint": "run-s lint:*",
     "lint:javascript": "eslint .",
     "semantic-release": "semantic-release",
@@ -20,7 +19,8 @@
     "start:src": "node --inspect --require @babel/register src/cli.js",
     "start:brk": "node --inspect-brk --require @babel/register src/cli.js",
     "test": "gulp clean:tests:unit && mocha src/**/*.spec.js --opts mocha.opts",
-    "test-cov": "nyc npm test"
+    "test-cov": "nyc npm test",
+    "update:reference": "jsdoc2md -c jsdoc.json --files src > docs/REFERENCE.md"
   },
   "repository": {
     "type": "git",
