@@ -1,6 +1,6 @@
 # starter.nodejs
 
-[![Build Status](https://travis-ci.org/AbrahamTewa/starter.nodejs.svg?branch=master)](https://travis-ci.org/AbrahamTewa/starter.nodejs) [![Coverage Status](https://coveralls.io/repos/github/AbrahamTewa/starter.nodejs/badge.svg?branch=master)](https://coveralls.io/github/AbrahamTewa/starter.nodejs?branch=master) [![Dependency status](https://david-dm.org/AbrahamTewa/starter.nodejs.svg)](https://david-dm.org/AbrahamTewa/starter.nodejs)
+[![Build Status](https://travis-ci.org/AbrahamTewa/starter.nodejs.svg?branch=master)](https://travis-ci.org/AbrahamTewa/starter.nodejs) [![Coverage Status](https://coveralls.io/repos/github/AbrahamTewa/starter.nodejs/badge.svg?branch=master)](https://coveralls.io/github/AbrahamTewa/starter.nodejs?branch=master) [![Dependency status](https://david-dm.org/AbrahamTewa/starter.nodejs.svg)](https://david-dm.org/AbrahamTewa/starter.nodejs) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/07acca80a73449ed98b6b0b44c2800e3)](https://www.codacy.com/app/AbrahamTewa/starter.nodejs?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AbrahamTewa/starter.nodejs&amp;utm_campaign=Badge_Grade)
 
 Simple node starter, using Babel 7, gulp 4, unit testing, eslinting, etc...
 
@@ -39,7 +39,7 @@ Complete unit-testing environment :
 ### Continuous Integration
 - [Travis](http://travis-ci.org/) integration, with jobs for:
     - Unit tests (all branches except `master`)
-    - Coverage (`master` branch only)
+    - Coverage (`master` branch only) reported to [coveralls.io](https://coveralls.io/)
     - Lint
     - Release
     - Github Pages
