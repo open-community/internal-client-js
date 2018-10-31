@@ -22,7 +22,7 @@
     "start:src": "node --inspect --require @babel/register src/cli.js",
     "start:brk": "node --inspect-brk --require @babel/register src/cli.js",
     "test": "gulp clean:tests:unit && mocha src/**/*.spec.js --opts mocha.opts",
-    "test-cov": "nyc run-s test",
+    "test-cov": "gulp clean:tests:unit && cross-env NODE_ENV=test nyc mocha src/**/*.spec.js --opts mocha.opts",
     "update:reference": "jsdoc2md -c jsdoc.json --files src > docs/REFERENCE.md"
   },
   "repository": {
@@ -43,6 +43,7 @@
     "babel-plugin-istanbul": "^5.1.0",
     "chai": "^4.2.0",
     "chai-jest-snapshot": "^2.0.0",
+    "cross-env": "^5.2.0",
     "del": "^3.0.0",
     "eslint": "^5.3.0",
     "eslint-config-airbnb-base": "^13.1.0",
