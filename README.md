@@ -136,6 +136,8 @@ This command will generate:
 * `./reports/tests/unit/coverage/lcov.info' : lcov file
 * `./reports/tests/unit/coverage/lcov-report/index.html' : HTML report file
 
+The output directory it's clean at the begining of the command.
+
 ## Continuous Integration
 Travis is already configured with several jobs and stages:
 
@@ -148,8 +150,9 @@ Travis is already configured with several jobs and stages:
 
 Unit tests will generate several files:
 
-| Path                                     | Description                                                        |
-| `dist/`                                    | Folder containing build files. See [npm build](#npm build) command |
+| Path                                       | Description                                                        |
+| --- | --- |
+| `dist/`                                    | Folder containing build files. See   [npm build](#npm-run-build) command |
 | `reports/tests/unit/xunit.xml`             | JUnit report of unit tests                                         |
 | `reports/tests/unit/results/`              | HTML report of unit tests                                          |
 | `reports/tests/unit/coverage/lcov.info`    | LCov coverage report of unit tests                                 |
