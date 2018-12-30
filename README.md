@@ -142,6 +142,7 @@ The output directory it's clean at the begining of the command.
 Travis is already configured with several jobs and stages:
 
 | Stage       | Job           | Description                                                         |
+| --- | --- | --- |
 | Validation  | Unit tests    | Run unit testing                                                    |
 | Validation  | Lint          | Run code linting                                                    |
 | Publication | Documentation | (`master` branch only) Create and publish the project documentation |
