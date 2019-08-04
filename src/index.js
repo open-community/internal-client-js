@@ -1,5 +1,1 @@
-import { sayHello } from './helpers';
-
-// ============================================================
-// Exports
-export default sayHello;
+export { default as Client } from './Client';
