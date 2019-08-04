@@ -1,15 +1,12 @@
 {
-  "name": "starter.nodejs",
-  "version": "1.9.0",
-  "description": "Starter kit for NodeJS",
+  "name": "@open-community/internal-serice-client",
+  "version": "0.1.0",
+  "description": "Client for Open-Community's internal services",
   "author": "Abraham TEWA",
   "license": "MIT",
-  "homepage": "https://abrahamtewa.github.io/starter.nodejs",
-  "bugs": "https://github.com/AbrahamTewa/starter.nodejs/issues",
+  "homepage": "https://github.com/open-community/text-service-client-javascript",
+  "bugs": "https://github.com/open-community/text-service-client-javascript/issues",
   "private": true,
-  "bin": {
-    "hello": "./dist/cli.js"
-  },
   "main": "./dist/index.js",
   "scripts": {
     "build": "gulp build",
@@ -28,10 +25,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/AbrahamTewa/starter.nodejs.git"
+    "url": "https://github.com/open-community/text-service-client-javascript"
   },
   "dependencies": {
     "better-console": "^1.0.1",
+    "node-fetch": "^2.6.0",
     "yargs": "^13.2.2"
   },
   "devDependencies": {
