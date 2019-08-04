@@ -1,5 +1,5 @@
 {
-  "name": "@open-community/internal-serice-client",
+  "name": "@open-community/internal-client",
   "version": "0.1.0",
   "description": "Client for Open-Community's internal services",
   "author": "Abraham TEWA",
