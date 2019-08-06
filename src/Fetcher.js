@@ -1,17 +1,22 @@
 // ============================================================
+// Import packages
+import { URL, resolve } from 'url';
+import fetch from 'node-fetch';
+import Error404 from './httpErrors/Error404';
+
+// ============================================================
 // Class
 class Fetcher {
     /**
      *
-     * @param {Client} client
+     * @param {URL}    url
      */
-    constructor(client) {
-        this.client = client;
-        this.url = client.getURL();
+    constructor(url) {
+        this.url = url;
     }
 
     /**
-     * Add a search param
+     * Add a search param to the URL.
      * @param {string} name
      * @param {*} value
      * @public
@@ -25,16 +30,12 @@ class Fetcher {
     }
 
     /**
+     * Perform a a HTTP DELETE fetch.
      * @param {string} path
-     * @param {Object} params
+     * @param {object} params
      */
-    async fetch(path, params) {
-        const result = await this.client.fetch(path, params);
-        return result;
-    }
-
     async DELETE(path, params) {
-        const result = await this.client.fetch(path, {
+        const result = await this.fetch(path, {
             ...params,
             method: 'DELETE',
         });
@@ -42,8 +43,28 @@ class Fetcher {
         return result;
     }
 
+    /**
+     * Perform a fetch
+     * @param {string} path
+     * @param {Object} params
+     * @public
+     */
+    async fetch(path = '/', params) {
+        const url = resolve(this.url, path);
+        try {
+            const result = await fetch(url, params);
+            return result;
+        } catch (err) {
+            if (err.code === 404) {
+                throw new Error404();
+            }
+
+            throw err;
+        }
+    }
+
     async GET(path, params) {
-        const result = await this.client.fetch(path, {
+        const result = await this.fetch(path, {
             ...params,
             method: 'GET',
         });
@@ -51,8 +72,17 @@ class Fetcher {
         return result;
     }
 
+    /**
+     * Return a new URL object
+     * @returns {URL}
+     * @public
+     */
+    getURL() {
+        return new URL(this.url);
+    }
+
     async POST(path, params) {
-        const result = await this.client.fetch(path, {
+        const result = await this.fetch(path, {
             ...params,
             method: 'POST',
         });
@@ -61,7 +91,7 @@ class Fetcher {
     }
 
     async PUT(path, params) {
-        const result = await this.client.fetch(path, {
+        const result = await this.fetch(path, {
             ...params,
             method: 'PUT',
         });

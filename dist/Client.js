@@ -5,17 +5,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _url = require("url");
-
-var _nodeFetch = _interopRequireDefault(require("node-fetch"));
-
 var _Fetcher = _interopRequireDefault(require("./Fetcher"));
 
-var text = _interopRequireWildcard(require("./text"));
+var text = _interopRequireWildcard(require("./services/text"));
+
+var _constants = require("./constants");
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
@@ -24,10 +26,6 @@ function _nonIterableRest() { throw new TypeError("Invalid attempt to destructur
 function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -41,70 +39,40 @@ var Client =
 /*#__PURE__*/
 function () {
   /**
-   * @param {URL} url
+   * @param {Object.<string>} urlMap
    * @public
    */
-  function Client(url) {
+  function Client() {
+    var urlMap = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
     _classCallCheck(this, Client);
 
-    this.url = url;
+    var servicesName = Object.keys(_constants.Services);
+    Object.entries(urlMap).forEach(function (_ref) {
+      var _ref2 = _slicedToArray(_ref, 2),
+          name = _ref2[0],
+          url = _ref2[1];
+
+      if (!servicesName.includes(name)) {
+        throw new Error("Unknown service: ".concat(name));
+      }
+
+      if (typeof url !== 'string') {
+        throw new Error("".concat(name, ": Not a string"));
+      }
+    });
+    this.urlMap = _objectSpread({}, urlMap);
   }
   /**
-   * Perform a fetch
-   * @param {string} path
-   * @param {Object} params
-   * @public
+   * @returns {Fetcher}
+   * @internal
    */
 
 
   _createClass(Client, [{
-    key: "fetch",
-    value: function () {
-      var _fetch2 = _asyncToGenerator(
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee() {
-        var path,
-            params,
-            url,
-            result,
-            _args = arguments;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                path = _args.length > 0 && _args[0] !== undefined ? _args[0] : '/';
-                params = _args.length > 1 ? _args[1] : undefined;
-                url = (0, _url.resolve)(this.url, path);
-                _context.next = 5;
-                return (0, _nodeFetch["default"])(url, params);
-
-              case 5:
-                result = _context.sent;
-                return _context.abrupt("return", result);
-
-              case 7:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function fetch() {
-        return _fetch2.apply(this, arguments);
-      }
-
-      return fetch;
-    }()
-    /**
-     * @returns {Fetcher}
-     * @public
-     */
-
-  }, {
     key: "getNewFetcher",
-    value: function getNewFetcher() {
-      return new _Fetcher["default"](this);
+    value: function getNewFetcher(type) {
+      return new _Fetcher["default"](this, this.getURL(type));
     }
     /**
      * Return a new URL object
@@ -114,20 +82,26 @@ function () {
 
   }, {
     key: "getURL",
-    value: function getURL() {
-      return new _url.URL(this.url);
+    value: function getURL(type) {
+      var url = this.urlMap[type];
+
+      if (!url) {
+        throw new Error('No URL defined for this server type');
+      }
+
+      return new URL(url);
     }
   }]);
 
   return Client;
 }();
 
-Client.prototype.text = Object.fromEntries(Object.entries(text).map(function map(_ref) {
-  var _ref2 = _slicedToArray(_ref, 2),
-      name = _ref2[0],
-      fct = _ref2[1];
+Client.prototype.text = Object.fromEntries(Object.entries(text).map(function map(_ref3) {
+  var _ref4 = _slicedToArray(_ref3, 2),
+      name = _ref4[0],
+      fct = _ref4[1];
 
-  return [name, fct.bind(undefined, this)];
+  return [name, fct.bind(undefined, this.getNewFetcher(_constants.Services.TEXT))];
 })); // ============================================================
 // Exports
 

@@ -1,0 +1,1 @@
+{"version":3,"sources":["httpErrors/index.js"],"names":[],"mappings":";;;;;;;;;;;;AAAA","sourcesContent":["export { default as Error404 } from './Error404';\n"],"file":"index.js"}

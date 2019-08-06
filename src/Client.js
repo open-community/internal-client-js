@@ -1,42 +1,41 @@
 // ============================================================
-// Import packages
-import { URL, resolve } from 'url';
-import fetch from 'node-fetch';
-
-// ============================================================
 // Import modules
 import Fetcher from './Fetcher';
-import * as text from './text';
+import * as text from './services/text';
+import { Services } from './constants';
 
 // ============================================================
 // Class
 class Client {
     /**
-     * @param {URL} url
+     * @param {Object.<string>} urlMap
      * @public
      */
-    constructor(url) {
-        this.url = url;
-    }
+    constructor(urlMap = {}) {
+        const servicesName = Object.keys(Services);
 
-    /**
-     * Perform a fetch
-     * @param {string} path
-     * @param {Object} params
-     * @public
-     */
-    async fetch(path = '/', params) {
-        const url = resolve(this.url, path);
-        const result = await fetch(url, params);
-        return result;
+        Object.entries(urlMap).forEach(([name, url]) => {
+            if (!servicesName.includes(name)) {
+                throw new Error(`Unknown service: ${name}`);
+            }
+
+            if (typeof url !== 'string') {
+                throw new Error(`${name}: Not a string`);
+            }
+        });
+
+        this.urlMap = { ...urlMap };
     }
 
     /**
      * @returns {Fetcher}
-     * @public
+     * @internal
      */
-    getNewFetcher() {
-        return new Fetcher(this);
+    getNewFetcher(type) {
+        return new Fetcher(
+            this,
+            this.getURL(type),
+        );
     }
 
     /**
@@ -44,8 +43,14 @@ class Client {
      * @returns {URL}
      * @public
      */
-    getURL() {
-        return new URL(this.url);
+    getURL(type) {
+        const url = this.urlMap[type];
+
+        if (!url) {
+            throw new Error('No URL defined for this server type');
+        }
+
+        return new URL(url);
     }
 }
 
@@ -53,7 +58,7 @@ Client.prototype.text = Object.fromEntries(
     Object.entries(text).map(function map([name, fct]) {
         return [
             name,
-            fct.bind(undefined, this),
+            fct.bind(undefined, this.getNewFetcher(Services.TEXT)),
         ];
     }),
 );
