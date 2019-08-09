@@ -12,7 +12,7 @@ exports.Services = void 0;
  * @enum {string} Services
  * @public
  */
-var Services = {
+const Services = {
   TEXT: 'text'
 }; // ============================================================
 // Exports

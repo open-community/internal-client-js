@@ -1,4 +1,8 @@
 // ============================================================
+// Import packages
+import { URL } from 'url';
+
+// ============================================================
 // Import modules
 import Fetcher from './Fetcher';
 import * as text from './services/text';
@@ -12,19 +16,27 @@ class Client {
      * @public
      */
     constructor(urlMap = {}) {
-        const servicesName = Object.keys(Services);
+        const servicesName = Object.values(Services);
 
         Object.entries(urlMap).forEach(([name, url]) => {
             if (!servicesName.includes(name)) {
                 throw new Error(`Unknown service: ${name}`);
             }
 
-            if (typeof url !== 'string') {
-                throw new Error(`${name}: Not a string`);
+            if (url instanceof Object) {
+                throw new Error(`${name}: Not a valid value `);
             }
         });
 
         this.urlMap = { ...urlMap };
+
+        this.text = Object.entries(text).reduce(
+            (acc, [name, fct]) => {
+                acc[name] = fct.bind(undefined, this.getNewFetcher(Services.TEXT));
+                return acc;
+            },
+            {},
+        );
     }
 
     /**
@@ -33,7 +45,6 @@ class Client {
      */
     getNewFetcher(type) {
         return new Fetcher(
-            this,
             this.getURL(type),
         );
     }
@@ -54,14 +65,12 @@ class Client {
     }
 }
 
-Client.prototype.text = Object.fromEntries(
-    Object.entries(text).map(function map([name, fct]) {
-        return [
-            name,
-            fct.bind(undefined, this.getNewFetcher(Services.TEXT)),
-        ];
-    }),
-);
+/* Client.prototype.text = Object.fromEntries(
+    Object.entries(text).map(([name, fct]) => [
+        name,
+        fct.bind(undefined, this.getNewFetcher(Services.TEXT)),
+    ]),
+); */
 
 // ============================================================
 // Exports

@@ -1,1 +1,1 @@
-{"version":3,"sources":["index.js"],"names":[],"mappings":";;;;;;;;;;;;;;;AAAA;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;;AAEA","sourcesContent":["export * from './constants';\n\nexport { default as Client } from './Client';\n"],"file":"index.js"}
+{"version":3,"sources":["index.js"],"names":[],"mappings":";;;;;;;;;;;;;AAAA;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;;AAEA","sourcesContent":["export * from './constants';\n\nexport { default } from './Client';\n"],"file":"index.js"}

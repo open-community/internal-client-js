@@ -50,7 +50,8 @@ class Fetcher {
      * @public
      */
     async fetch(path = '/', params) {
-        const url = resolve(this.url, path);
+        console.log(this.url);
+        const url = resolve(this.url.href, path);
         try {
             const result = await fetch(url, params);
             return result;
