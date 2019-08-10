@@ -2,7 +2,7 @@
 // Import packages
 import { URL, resolve } from 'url';
 import fetch from 'node-fetch';
-import Error404 from './httpErrors/Error404';
+import { NotFound, ClientError } from './httpErrors';
 
 // ============================================================
 // Class
@@ -35,7 +35,7 @@ class Fetcher {
      * @param {object} params
      */
     async DELETE(path, params) {
-        const result = await this.fetch(path, {
+        const result = await this.fetchJSON(path, {
             ...params,
             method: 'DELETE',
         });
@@ -50,22 +50,34 @@ class Fetcher {
      * @public
      */
     async fetch(path = '/', params) {
-        console.log(this.url);
         const url = resolve(this.url.href, path);
-        try {
-            const result = await fetch(url, params);
-            return result;
-        } catch (err) {
-            if (err.code === 404) {
-                throw new Error404();
-            }
 
-            throw err;
+        const response = await fetch(url, params);
+
+        if (response.ok) {
+            return response;
         }
+
+        if (response.code === 404) {
+            throw new NotFound(response);
+        }
+
+        throw new ClientError(response);
+    }
+
+    /**
+     * Perform a fetch
+     * @param {string} path
+     * @param {Object} params
+     * @public
+     */
+    async fetchJSON(path = '/', params) {
+        const response = await this.fetch(path, params);
+        return response.json();
     }
 
     async GET(path, params) {
-        const result = await this.fetch(path, {
+        const result = await this.fetchJSON(path, {
             ...params,
             method: 'GET',
         });
@@ -83,7 +95,7 @@ class Fetcher {
     }
 
     async POST(path, params) {
-        const result = await this.fetch(path, {
+        const result = await this.fetchJSON(path, {
             ...params,
             method: 'POST',
         });
@@ -92,7 +104,7 @@ class Fetcher {
     }
 
     async PUT(path, params) {
-        const result = await this.fetch(path, {
+        const result = await this.fetchJSON(path, {
             ...params,
             method: 'PUT',
         });

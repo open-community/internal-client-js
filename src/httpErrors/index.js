@@ -1,1 +1,3 @@
-export { default as Error404 } from './Error404';
+export { default as NotFound } from './NotFound';
+export { default as ClientError } from './ClientError';
+export { default as HttpError } from './HttpError';

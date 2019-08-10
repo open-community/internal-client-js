@@ -8,9 +8,7 @@ exports.delete = deleteText;
 exports.get = getText;
 exports.find = findText;
 
-var _Error = _interopRequireDefault(require("../httpErrors/Error404"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _httpErrors = require("../httpErrors");
 
 // ============================================================
 // Functions
@@ -30,7 +28,7 @@ async function createText(client, {
     const createdText = await client.POST('/text', fetchParams);
     return createdText;
   } catch (err) {
-    if (err instanceof _Error.default) {
+    if (err instanceof _httpErrors.NotFound) {
       return undefined;
     }
 

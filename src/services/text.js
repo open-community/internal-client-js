@@ -1,4 +1,4 @@
-import Error404 from '../httpErrors/Error404';
+import { NotFound } from '../httpErrors';
 
 // ============================================================
 // Functions
@@ -20,7 +20,7 @@ async function createText(
         const createdText = await client.POST('/text', fetchParams);
         return createdText;
     } catch (err) {
-        if (err instanceof Error404) {
+        if (err instanceof NotFound) {
             return undefined;
         }
 

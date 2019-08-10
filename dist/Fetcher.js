@@ -9,7 +9,7 @@ var _url = require("url");
 
 var _nodeFetch = _interopRequireDefault(require("node-fetch"));
 
-var _Error = _interopRequireDefault(require("./httpErrors/Error404"));
+var _httpErrors = require("./httpErrors");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -48,7 +48,7 @@ class Fetcher {
 
 
   async DELETE(path, params) {
-    const result = await this.fetch(path, { ...params,
+    const result = await this.fetchJSON(path, { ...params,
       method: 'DELETE'
     });
     return result;
@@ -62,23 +62,34 @@ class Fetcher {
 
 
   async fetch(path = '/', params) {
-    console.log(this.url);
     const url = (0, _url.resolve)(this.url.href, path);
+    const response = await (0, _nodeFetch.default)(url, params);
 
-    try {
-      const result = await (0, _nodeFetch.default)(url, params);
-      return result;
-    } catch (err) {
-      if (err.code === 404) {
-        throw new _Error.default();
-      }
-
-      throw err;
+    if (response.ok) {
+      return response;
     }
+
+    if (response.code === 404) {
+      throw new _httpErrors.NotFound(response);
+    }
+
+    throw new _httpErrors.ClientError(response);
+  }
+  /**
+   * Perform a fetch
+   * @param {string} path
+   * @param {Object} params
+   * @public
+   */
+
+
+  async fetchJSON(path = '/', params) {
+    const response = await this.fetch(path, params);
+    return response.json();
   }
 
   async GET(path, params) {
-    const result = await this.fetch(path, { ...params,
+    const result = await this.fetchJSON(path, { ...params,
       method: 'GET'
     });
     return result;
@@ -95,14 +106,14 @@ class Fetcher {
   }
 
   async POST(path, params) {
-    const result = await this.fetch(path, { ...params,
+    const result = await this.fetchJSON(path, { ...params,
       method: 'POST'
     });
     return result;
   }
 
   async PUT(path, params) {
-    const result = await this.fetch(path, { ...params,
+    const result = await this.fetchJSON(path, { ...params,
       method: 'PUT'
     });
     return result;
