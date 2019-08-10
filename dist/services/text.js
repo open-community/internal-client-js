@@ -17,15 +17,16 @@ var _httpErrors = require("../httpErrors");
  *
  * @param {Fetcher} client
  */
-async function createText(client, {
-  text
-}) {
+async function createText(client, text) {
   const fetchParams = {
-    body: text
+    body: JSON.stringify(text),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8'
+    }
   };
 
   try {
-    const createdText = await client.POST('/text', fetchParams);
+    const createdText = await client.PUT('/text', fetchParams);
     return createdText;
   } catch (err) {
     if (err instanceof _httpErrors.NotFound) {
@@ -41,9 +42,7 @@ async function createText(client, {
  */
 
 
-async function deleteText(client, {
-  id
-}) {
+async function deleteText(client, id) {
   await client.DELETE(`/text/${id}`);
 }
 /**
@@ -52,9 +51,7 @@ async function deleteText(client, {
  */
 
 
-async function getText(client, {
-  id
-}) {
+async function getText(client, id) {
   const createdText = await client.GET(`/text/${id}`);
   return createdText;
 }

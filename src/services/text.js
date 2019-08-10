@@ -8,16 +8,17 @@ import { NotFound } from '../httpErrors';
  */
 async function createText(
     client,
-    {
-        text,
-    },
+    text,
 ) {
     const fetchParams = {
-        body: text,
+        body: JSON.stringify(text),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
     };
 
     try {
-        const createdText = await client.POST('/text', fetchParams);
+        const createdText = await client.PUT('/text', fetchParams);
         return createdText;
     } catch (err) {
         if (err instanceof NotFound) {
@@ -34,9 +35,7 @@ async function createText(
  */
 async function deleteText(
     client,
-    {
-        id,
-    },
+    id,
 ) {
     await client.DELETE(`/text/${id}`);
 }
@@ -47,9 +46,7 @@ async function deleteText(
  */
 async function getText(
     client,
-    {
-        id,
-    },
+    id,
 ) {
     const createdText = await client.GET(`/text/${id}`);
 
