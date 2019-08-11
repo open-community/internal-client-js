@@ -48,9 +48,8 @@ async function getText(
     client,
     id,
 ) {
-    const createdText = await client.GET(`/text/${id}`);
-
-    return createdText;
+    const fetchedText = await client.GET(`/text/${id}`);
+    return fetchedText;
 }
 
 /**
@@ -82,6 +81,9 @@ async function findText(
         } = {},
         search,
         sort,
+        store: {
+            forceIndex = false,
+        } = {},
         title,
     } = {},
 ) {
@@ -99,6 +101,7 @@ async function findText(
     client.appendSearchParams('pagination.size', paginationSize);
     client.appendSearchParams('search', search);
     client.appendSearchParams('sort', sort);
+    client.appendSearchParams('store.forceIndex', forceIndex);
     client.appendSearchParams('title', title);
 
     const listTexts = await client.GET('/text');

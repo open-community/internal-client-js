@@ -60,8 +60,6 @@ class Fetcher {
             url.searchParams.append(name, value);
         });
 
-        console.log(`${params.method || 'GET'} ${url}`);
-
         const response = await fetch(url, params);
 
         if (response.ok) {

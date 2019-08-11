@@ -69,7 +69,6 @@ class Fetcher {
     this.url.searchParams.forEach((value, name) => {
       url.searchParams.append(name, value);
     });
-    console.log(`${params.method || 'GET'} ${url}`);
     const response = await (0, _nodeFetch.default)(url, params);
 
     if (response.ok) {

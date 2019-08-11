@@ -52,8 +52,8 @@ async function deleteText(client, id) {
 
 
 async function getText(client, id) {
-  const createdText = await client.GET(`/text/${id}`);
-  return createdText;
+  const fetchedText = await client.GET(`/text/${id}`);
+  return fetchedText;
 }
 /**
  * @param {Fetcher} client
@@ -84,6 +84,9 @@ async function findText(client, {
   } = {},
   search,
   sort,
+  store: {
+    forceIndex = false
+  } = {},
   title
 } = {}) {
   client.appendSearchParams('author.account.id', authorAccount);
@@ -100,6 +103,7 @@ async function findText(client, {
   client.appendSearchParams('pagination.size', paginationSize);
   client.appendSearchParams('search', search);
   client.appendSearchParams('sort', sort);
+  client.appendSearchParams('store.forceIndex', forceIndex);
   client.appendSearchParams('title', title);
   const listTexts = await client.GET('/text');
   return listTexts;
