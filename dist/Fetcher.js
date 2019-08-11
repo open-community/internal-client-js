@@ -39,6 +39,7 @@ class Fetcher {
     }
 
     this.url.searchParams.append(name, value);
+    console.log(this.url.href);
   }
   /**
    * Perform a a HTTP DELETE fetch.
@@ -47,7 +48,7 @@ class Fetcher {
    */
 
 
-  async DELETE(path, params) {
+  async DELETE(path, params = {}) {
     const result = await this.fetchJSON(path, { ...params,
       method: 'DELETE'
     });
@@ -62,7 +63,13 @@ class Fetcher {
 
 
   async fetch(path = '/', params) {
-    const url = (0, _url.resolve)(this.url.href, path);
+    // const url = resolve(this.url.href, path);
+    const url = new _url.URL(path, this.url); // Copying search params
+
+    this.url.searchParams.forEach((value, name) => {
+      url.searchParams.append(name, value);
+    });
+    console.log(`${params.method || 'GET'} ${url}`);
     const response = await (0, _nodeFetch.default)(url, params);
 
     if (response.ok) {
@@ -83,12 +90,12 @@ class Fetcher {
    */
 
 
-  async fetchJSON(path = '/', params) {
+  async fetchJSON(path = '/', params = {}) {
     const response = await this.fetch(path, params);
     return response.json();
   }
 
-  async GET(path, params) {
+  async GET(path, params = {}) {
     const result = await this.fetchJSON(path, { ...params,
       method: 'GET'
     });
@@ -105,14 +112,14 @@ class Fetcher {
     return new _url.URL(this.url);
   }
 
-  async POST(path, params) {
+  async POST(path, params = {}) {
     const result = await this.fetchJSON(path, { ...params,
       method: 'POST'
     });
     return result;
   }
 
-  async PUT(path, params) {
+  async PUT(path, params = {}) {
     const result = await this.fetchJSON(path, { ...params,
       method: 'PUT'
     });

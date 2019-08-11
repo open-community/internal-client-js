@@ -71,21 +71,21 @@ async function findText(client, {
   creationDate: {
     max: creationDateMax,
     min: creationDateMin
-  },
+  } = {},
   deletionDate: {
     max: deletionDateMax,
     min: deletionDateMin
-  },
+  } = {},
   id,
   owner,
   pagination: {
     offset: paginationOffset,
     size: paginationSize
-  },
+  } = {},
   search,
   sort,
   title
-}) {
+} = {}) {
   client.appendSearchParams('author.account.id', authorAccount);
   client.appendSearchParams('author.identity.id', authorIdentity);
   client.appendSearchParams('content', content);
