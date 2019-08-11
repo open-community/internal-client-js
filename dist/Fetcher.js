@@ -39,7 +39,6 @@ class Fetcher {
     }
 
     this.url.searchParams.append(name, value);
-    console.log(this.url.href);
   }
   /**
    * Perform a a HTTP DELETE fetch.
@@ -49,10 +48,8 @@ class Fetcher {
 
 
   async DELETE(path, params = {}) {
-    const result = await this.fetchJSON(path, { ...params,
-      method: 'DELETE'
-    });
-    return result;
+    const response = await this.rawDELETE(path, params);
+    return response.json();
   }
   /**
    * Perform a fetch
@@ -95,10 +92,8 @@ class Fetcher {
   }
 
   async GET(path, params = {}) {
-    const result = await this.fetchJSON(path, { ...params,
-      method: 'GET'
-    });
-    return result;
+    const response = await this.rawGET(path, params);
+    return response.json();
   }
   /**
    * Return a new URL object
@@ -112,14 +107,45 @@ class Fetcher {
   }
 
   async POST(path, params = {}) {
-    const result = await this.fetchJSON(path, { ...params,
+    const response = await this.rawPOST(path, params);
+    return response.json();
+  }
+
+  async PUT(path, params = {}) {
+    const response = await this.rawPUT(path, params);
+    return response.json();
+  }
+  /**
+   * Perform a raw HTTP DELETE fetch.
+   * @param {string} path
+   * @param {object} params
+   * @returns {Response}
+   */
+
+
+  async rawDELETE(path, params = {}) {
+    const result = await this.fetch(path, { ...params,
+      method: 'DELETE'
+    });
+    return result;
+  }
+
+  async rawGET(path, params = {}) {
+    const result = await this.fetch(path, { ...params,
+      method: 'GET'
+    });
+    return result;
+  }
+
+  async rawPOST(path, params = {}) {
+    const result = await this.fetch(path, { ...params,
       method: 'POST'
     });
     return result;
   }
 
-  async PUT(path, params = {}) {
-    const result = await this.fetchJSON(path, { ...params,
+  async rawPUT(path, params = {}) {
+    const result = await this.fetch(path, { ...params,
       method: 'PUT'
     });
     return result;

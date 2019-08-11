@@ -1,6 +1,6 @@
 // ============================================================
 // Import packages
-import { URL, resolve } from 'url';
+import { URL } from 'url';
 import fetch from 'node-fetch';
 import { NotFound, ClientError } from './httpErrors';
 
@@ -27,7 +27,6 @@ class Fetcher {
         }
 
         this.url.searchParams.append(name, value);
-        console.log(this.url.href);
     }
 
     /**
@@ -36,12 +35,8 @@ class Fetcher {
      * @param {object} params
      */
     async DELETE(path, params = {}) {
-        const result = await this.fetchJSON(path, {
-            ...params,
-            method: 'DELETE',
-        });
-
-        return result;
+        const response = await this.rawDELETE(path, params);
+        return response.json();
     }
 
     /**
@@ -85,12 +80,8 @@ class Fetcher {
     }
 
     async GET(path, params = {}) {
-        const result = await this.fetchJSON(path, {
-            ...params,
-            method: 'GET',
-        });
-
-        return result;
+        const response = await this.rawGET(path, params);
+        return response.json();
     }
 
     /**
@@ -103,7 +94,41 @@ class Fetcher {
     }
 
     async POST(path, params = {}) {
-        const result = await this.fetchJSON(path, {
+        const response = await this.rawPOST(path, params);
+        return response.json();
+    }
+
+    async PUT(path, params = {}) {
+        const response = await this.rawPUT(path, params);
+        return response.json();
+    }
+
+    /**
+     * Perform a raw HTTP DELETE fetch.
+     * @param {string} path
+     * @param {object} params
+     * @returns {Response}
+     */
+    async rawDELETE(path, params = {}) {
+        const result = await this.fetch(path, {
+            ...params,
+            method: 'DELETE',
+        });
+
+        return result;
+    }
+
+    async rawGET(path, params = {}) {
+        const result = await this.fetch(path, {
+            ...params,
+            method: 'GET',
+        });
+
+        return result;
+    }
+
+    async rawPOST(path, params = {}) {
+        const result = await this.fetch(path, {
             ...params,
             method: 'POST',
         });
@@ -111,8 +136,8 @@ class Fetcher {
         return result;
     }
 
-    async PUT(path, params = {}) {
-        const result = await this.fetchJSON(path, {
+    async rawPUT(path, params = {}) {
+        const result = await this.fetch(path, {
             ...params,
             method: 'PUT',
         });

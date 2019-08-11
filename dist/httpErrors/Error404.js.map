@@ -1,1 +1,0 @@
-{"version":3,"sources":["httpErrors/Error404.js"],"names":["Error404"],"mappings":";;;;;;;AAAA,MAAMA,QAAN,CAAe,E,CAGf;AACA;;;eACeA,Q","sourcesContent":["class Error404 {\n}\n\n// ============================================================\n// Exports\nexport default Error404;\n"],"file":"Error404.js"}

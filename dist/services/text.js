@@ -16,10 +16,15 @@ var _httpErrors = require("../httpErrors");
 /**
  *
  * @param {Fetcher} client
+ * @param {Text}    text   - Text to create
+ * @param {Object}  [store]  - Storage parameters
+ * @param {boolean} [store.refreshIndex]
  */
-async function createText(client, text) {
+async function createText(client, text, store) {
   const fetchParams = {
-    body: JSON.stringify(text),
+    body: JSON.stringify({ ...text,
+      store
+    }),
     headers: {
       'Content-type': 'application/json; charset=UTF-8'
     }
@@ -43,7 +48,7 @@ async function createText(client, text) {
 
 
 async function deleteText(client, id) {
-  await client.DELETE(`/text/${id}`);
+  await client.rawDELETE(`/text/${id}`);
 }
 /**
  *
@@ -52,8 +57,16 @@ async function deleteText(client, id) {
 
 
 async function getText(client, id) {
-  const fetchedText = await client.GET(`/text/${id}`);
-  return fetchedText;
+  try {
+    const fetchedText = await client.GET(`/text/${id}`);
+    return fetchedText;
+  } catch (err) {
+    if (err instanceof _httpErrors.NotFound) {
+      return undefined;
+    }
+
+    throw err;
+  }
 }
 /**
  * @param {Fetcher} client
