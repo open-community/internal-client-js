@@ -72,7 +72,7 @@ class Fetcher {
       return response;
     }
 
-    if (response.code === 404) {
+    if (response.status === 404) {
       throw new _httpErrors.NotFound(response);
     }
 
