@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.ResponseType = exports.default = void 0;
 
 var _url = require("url");
 
@@ -16,7 +16,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // ============================================================
 // Import packages
 // ============================================================
+// Module's constants and variables
+const ResponseType = {
+  JSON: 'json',
+  TEXT: 'text',
+  BLOB: 'blob'
+}; // ============================================================
 // Class
+
+exports.ResponseType = ResponseType;
+
 class Fetcher {
   /**
    *
@@ -47,9 +56,24 @@ class Fetcher {
    */
 
 
-  async DELETE(path, params = {}) {
+  async DELETE(path, params = {}, {
+    response: responseType = 'json'
+  } = {}) {
     const response = await this.rawDELETE(path, params);
-    return response.json();
+
+    switch (responseType) {
+      case ResponseType.JSON:
+        return response.json();
+
+      case ResponseType.TEXT:
+        return response.text();
+
+      case false:
+        return undefined;
+
+      default:
+        return response.blob();
+    }
   }
   /**
    * Perform a fetch
@@ -91,9 +115,24 @@ class Fetcher {
     return response.json();
   }
 
-  async GET(path, params = {}) {
+  async GET(path, params = {}, {
+    response: responseType = 'json'
+  } = {}) {
     const response = await this.rawGET(path, params);
-    return response.json();
+
+    switch (responseType) {
+      case ResponseType.JSON:
+        return response.json();
+
+      case ResponseType.TEXT:
+        return response.text();
+
+      case false:
+        return undefined;
+
+      default:
+        return response.blob();
+    }
   }
   /**
    * Return a new URL object
@@ -106,14 +145,44 @@ class Fetcher {
     return new _url.URL(this.url);
   }
 
-  async POST(path, params = {}) {
+  async POST(path, params = {}, {
+    response: responseType = 'json'
+  } = {}) {
     const response = await this.rawPOST(path, params);
-    return response.json();
+
+    switch (responseType) {
+      case ResponseType.JSON:
+        return response.json();
+
+      case ResponseType.TEXT:
+        return response.text();
+
+      case false:
+        return undefined;
+
+      default:
+        return response.blob();
+    }
   }
 
-  async PUT(path, params = {}) {
+  async PUT(path, params = {}, {
+    response: responseType = 'json'
+  } = {}) {
     const response = await this.rawPUT(path, params);
-    return response.json();
+
+    switch (responseType) {
+      case ResponseType.JSON:
+        return response.json();
+
+      case ResponseType.TEXT:
+        return response.text();
+
+      case false:
+        return undefined;
+
+      default:
+        return response.blob();
+    }
   }
   /**
    * Perform a raw HTTP DELETE fetch.

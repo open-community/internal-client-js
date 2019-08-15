@@ -5,11 +5,14 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.create = createText;
 exports.delete = deleteText;
-exports.get = getText;
 exports.find = findText;
+exports.get = getText;
+exports.refreshIndex = refreshIndex;
 
 var _httpErrors = require("../httpErrors");
 
+// ============================================================
+// Import modules
 // ============================================================
 // Functions
 
@@ -120,6 +123,18 @@ async function findText(client, {
   client.appendSearchParams('title', title);
   const listTexts = await client.GET('/text');
   return listTexts;
+}
+/**
+ *
+ * @param {Client} client
+ * @public
+ */
+
+
+async function refreshIndex(client) {
+  await client.POST('/store/refreshIndex', undefined, {
+    response: false
+  });
 } // ============================================================
 // Exports
 //# sourceMappingURL=text.js.map

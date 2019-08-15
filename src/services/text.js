@@ -1,3 +1,5 @@
+// ============================================================
+// Import modules
 import { NotFound } from '../httpErrors';
 
 // ============================================================
@@ -124,11 +126,25 @@ async function findText(
     return listTexts;
 }
 
+/**
+ *
+ * @param {Client} client
+ * @public
+ */
+async function refreshIndex(client) {
+    await client.POST(
+        '/store/refreshIndex',
+        undefined,
+        { response: false },
+    );
+}
+
 // ============================================================
 // Exports
 export {
     createText as create,
     deleteText as delete,
-    getText as get,
     findText as find,
+    getText as get,
+    refreshIndex,
 };

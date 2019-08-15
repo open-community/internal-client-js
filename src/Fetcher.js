@@ -5,6 +5,14 @@ import fetch from 'node-fetch';
 import { NotFound, ClientError } from './httpErrors';
 
 // ============================================================
+// Module's constants and variables
+const ResponseType = {
+    JSON: 'json',
+    TEXT: 'text',
+    BLOB: 'blob',
+};
+
+// ============================================================
 // Class
 class Fetcher {
     /**
@@ -34,9 +42,18 @@ class Fetcher {
      * @param {string} path
      * @param {object} params
      */
-    async DELETE(path, params = {}) {
+    async DELETE(path, params = {}, { response: responseType = 'json' } = {}) {
         const response = await this.rawDELETE(path, params);
-        return response.json();
+        switch (responseType) {
+        case ResponseType.JSON:
+            return response.json();
+        case ResponseType.TEXT:
+            return response.text();
+        case false:
+            return undefined;
+        default:
+            return response.blob();
+        }
     }
 
     /**
@@ -79,9 +96,18 @@ class Fetcher {
         return response.json();
     }
 
-    async GET(path, params = {}) {
+    async GET(path, params = {}, { response: responseType = 'json' } = {}) {
         const response = await this.rawGET(path, params);
-        return response.json();
+        switch (responseType) {
+        case ResponseType.JSON:
+            return response.json();
+        case ResponseType.TEXT:
+            return response.text();
+        case false:
+            return undefined;
+        default:
+            return response.blob();
+        }
     }
 
     /**
@@ -93,14 +119,32 @@ class Fetcher {
         return new URL(this.url);
     }
 
-    async POST(path, params = {}) {
+    async POST(path, params = {}, { response: responseType = 'json' } = {}) {
         const response = await this.rawPOST(path, params);
-        return response.json();
+        switch (responseType) {
+        case ResponseType.JSON:
+            return response.json();
+        case ResponseType.TEXT:
+            return response.text();
+        case false:
+            return undefined;
+        default:
+            return response.blob();
+        }
     }
 
-    async PUT(path, params = {}) {
+    async PUT(path, params = {}, { response: responseType = 'json' } = {}) {
         const response = await this.rawPUT(path, params);
-        return response.json();
+        switch (responseType) {
+        case ResponseType.JSON:
+            return response.json();
+        case ResponseType.TEXT:
+            return response.text();
+        case false:
+            return undefined;
+        default:
+            return response.blob();
+        }
     }
 
     /**
@@ -149,3 +193,7 @@ class Fetcher {
 // ============================================================
 // Exports
 export default Fetcher;
+
+export {
+    ResponseType,
+};
