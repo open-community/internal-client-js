@@ -1,0 +1,1 @@
+{"version":3,"sources":["Pagger.js"],"names":["Pagger","constructor"],"mappings":";;;;;;;AAAA,MAAMA,MAAN,CAAa;AACTC,EAAAA,WAAW,GAAG,CAEb;;AAHQ,C,CAMb;AACA;;;eACeD,M","sourcesContent":["class Pagger {\n    constructor() {\n        \n    }\n}\n\n// ============================================================\n// Exports\nexport default Pagger;\n"],"file":"Pagger.js"}
