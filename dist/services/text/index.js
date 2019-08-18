@@ -4,12 +4,12 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var _exportNames = {
-  findIterator: true
+  find: true
 };
-Object.defineProperty(exports, "findIterator", {
+Object.defineProperty(exports, "find", {
   enumerable: true,
   get: function () {
-    return _find.findIterator;
+    return _findText.findText;
   }
 });
 
@@ -26,5 +26,5 @@ Object.keys(_text).forEach(function (key) {
   });
 });
 
-var _find = require("./find");
+var _findText = require("./findText");
 //# sourceMappingURL=index.js.map

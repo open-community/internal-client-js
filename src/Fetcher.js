@@ -190,7 +190,7 @@ class Fetcher {
     }
 
     setSearchParam(name, value) {
-        this.url.searchParams(name, value);
+        this.url.searchParams.set(name, value);
     }
 }
 

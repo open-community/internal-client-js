@@ -1,3 +1,10 @@
+// ============================================================
+// Import modules
+import { IteratorCache } from '../../helpers';
+
+// ============================================================
+// Functions
+
 /**
  * @typedef {Object} FindResult.<T>
  * @property {Array.<T>} list - List of elements
@@ -16,71 +23,52 @@
  */
 
 /**
- * @param {Fetcher} client
+ * @param {Fetcher}    client
+ * @param {number}     offset
+ * @param {TextFilter} filters
  * @returns {Iterator.<FindResult.<Text>, FindParams>}
  */
 async function* findText(
     client,
     {
-        author: {
-            account: authorAccount,
-            identity: authorIdentity,
+        offset: paginationOffset,
+        ...filters
+    } = {},
+    {
+        cache: {
+            size: initialCacheSize,
         } = {},
-        content,
-        context,
-        creationDate: {
-            max: creationDateMax,
-            min: creationDateMin,
-        } = {},
-        deletionDate: {
-            max: deletionDateMax,
-            min: deletionDateMin,
-        } = {},
-        id,
-        owner,
-        pagination: {
-            cache: initialCacheSize = 10,
-            offset: paginationOffset,
-            size: paginationSize = 10,
+        fetch: {
+            size: fetchSize = 10,
         } = {},
         quantity: initialQuantity = 10,
-        search,
-        sort,
-        store: {
-            forceIndex = false,
-        } = {},
-        title,
     } = {},
 ) {
-    client.appendSearchParams('author.account.id', authorAccount);
-    client.appendSearchParams('author.identity.id', authorIdentity);
-    client.appendSearchParams('content', content);
-    client.appendSearchParams('context.id', context);
-    client.appendSearchParams('creation-date.max', creationDateMax);
-    client.appendSearchParams('creation-date.min', creationDateMin);
-    client.appendSearchParams('deletion-date.max', deletionDateMax);
-    client.appendSearchParams('deletion-date.min', deletionDateMin);
-    client.appendSearchParams('id', id);
-    client.appendSearchParams('owner.id', owner);
-    client.appendSearchParams('pagination.offset', paginationOffset);
-    client.appendSearchParams('pagination.size', paginationSize);
-    client.appendSearchParams('search', search);
-    client.appendSearchParams('sort', sort);
-    client.appendSearchParams('store.forceIndex', forceIndex);
-    client.appendSearchParams('title', title);
+    // Adding filters to the client search params
+    prepareClient(client, filters);
 
+    client.appendSearchParams('pagination.size', fetchSize);
+    client.appendSearchParams('pagination.offset', paginationOffset);
+
+    // Fetching initial data
     const { list, total } = await client.GET('/text');
 
-    const cache = new CacheUpdate(
-        client,
-        initialCacheSize,
-        total,
-        list,
-        paginationOffset,
+    // Building the cache
+    const cache = new IteratorCache(
+        {
+            callback: async (offset) => {
+                client.setSearchParam('pagination.offset', paginationOffset + offset);
+
+                const { list: returnList } = await client.GET('/text');
+                return returnList;
+            },
+            size: Number.isInteger(initialCacheSize) ? initialCacheSize : 2 * fetchSize,
+            initialData: list,
+            total,
+        },
     );
 
     let remaining = total - paginationOffset;
-
     let quantity = initialQuantity;
 
     while (true) {
@@ -122,7 +110,7 @@ async function* findText(
 
             // Pagination size
             if (Number.isInteger(nextPaginationSize) && nextPaginationSize > 0) {
-                client.setSearchParam('pagination.size', paginationSize);
+                client.setSearchParam('pagination.size', fetchSize);
             }
 
             // Cache size. Note that since the cache will be filled, it is important that
@@ -134,103 +122,76 @@ async function* findText(
     }
 }
 
-class CacheUpdate {
-    constructor(client, size, total, firstItems, offset) {
-        this.client = client;
-        this.size = size;
-        this.total = total;
-        this.data = [...firstItems];
-        this.offset = firstItems.length + offset;
-    }
+/**
+ *
+ * @param {Client} client
+ * @param {TextFilter} filters
+ * @private
+ */
+function prepareClient(client, filters) {
+    const {
+        author: {
+            account: authorAccount,
+            identity: authorIdentity,
+        } = {},
+        content,
+        context,
+        creationDate: {
+            max: creationDateMax,
+            min: creationDateMin,
+        } = {},
+        deletionDate: {
+            max: deletionDateMax,
+            min: deletionDateMin,
+        } = {},
+        id,
+        owner,
+        search,
+        title,
+        sort,
+    } = filters;
 
-    /**
-     * Perform the actual cache fill.
-     * When the cache target is reach, the onCacheTargetSize method will be executed (this is
-     * usefull when the target is lower than the cache size)
-     * @private
-     */
-    async fill() {
-        // If a fill is already in progress, we do nothing
-        if (this.cacheFillInProgress) {
-            return;
-        }
-
-        this.cacheFillInProgress = true;
-
-        while (
-            (
-                // Cache size or target not yet reach
-                this.data.length < this.cacheTargetSize || this.data.length < this.size
-            )
-            && this.offset < this.total // There is no more data to fetch
-        ) {
-            this.client.setSearchParam('pagination.offset', this.offset);
-
-            // eslint-disable-next-line no-await-in-loop
-            const { list } = await this.client.GET('/text');
-            this.data.concat(...list);
-
-            // Updating the offset
-            this.offset += list.length;
-
-            // If cache target reach, we trigger the cache target function
-            if (this.onCacheTargetReach && this.data.length >= this.cacheTargetSize) {
-                this.onCacheTargetReach();
-                this.onCacheTargetReach = undefined;
-            }
-        }
-
-        this.cacheFillInProgress = false;
-    }
-
-    /**
-     * Return the nexts elements of the cache.
-     * @param {number} count - Number of elements to return
-     * @public
-     */
-    async get(count = 10) {
-        await this.load(count);
-
-        // Removing elements from the cache
-        const data = this.data.splice(0, count);
-
-        // Filling the cache
-        this.fill();
-
-        return data;
-    }
-
-    /**
-     * @param {Number} target - Cache target size
-     * @private
-     */
-    async load(target) {
-        this.cacheTargetSize = target;
-
-        // If no cache update in progress, force the cache fill
-        this.fill();
-
-        await new Promise((resolve) => {
-            this.onCacheTargetReach = resolve;
-        });
-
-        this.cacheTargetSize = undefined;
-    }
-
-    /**
-     * Set the size of the cache.
-     * This will force the cache to fill if necessary.
-     * @param {Number} size - New size of the cache
-     * @public
-     */
-    setSize(size) {
-        this.size = size;
-        this.fill();
-    }
+    client.appendSearchParams('author.account.id', authorAccount);
+    client.appendSearchParams('author.identity.id', authorIdentity);
+    client.appendSearchParams('content', content);
+    client.appendSearchParams('context.id', context);
+    client.appendSearchParams('creation-date.max', creationDateMax);
+    client.appendSearchParams('creation-date.min', creationDateMin);
+    client.appendSearchParams('deletion-date.max', deletionDateMax);
+    client.appendSearchParams('deletion-date.min', deletionDateMin);
+    client.appendSearchParams('id', id);
+    client.appendSearchParams('owner.id', owner);
+    client.appendSearchParams('search', search);
+    client.appendSearchParams('sort', sort);
+    client.appendSearchParams('title', title);
 }
+
+// ============================================================
+// JsDoc
+
+/**
+ * @typedef {Object} TextFilter
+ * @property {Object}   author
+ * @property {ApiID}    author.account - ID of the authors accounts
+ * @property {ApiID}    author.identity - ID of the author identity
+ * @property {string[]} content
+ * @property {ApiID[]}  context
+ * @property {Object}   creationDate
+ * @property {Date}     creationDate.min
+ * @property {Date}     creationDate.max
+ * @property {Object}   deletionDate
+ * @property {Date}     deletionDate.max
+ * @property {Date}     deletionDate.min
+ * @property {ApiID[]}  id
+ * @property {ApiID[]}  owner - ID of the owner accounts
+ * @property {string[]} search
+ * @property {string[]} title
+ * @property {string}   sort
+ */
 
 // ============================================================
 // Exports
 export {
     findText,
+    prepareClient,
 };
